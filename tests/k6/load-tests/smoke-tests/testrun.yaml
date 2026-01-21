@@ -1,0 +1,15 @@
+apiVersion: k6.io/v1alpha1
+kind: TestRun
+metadata:
+  name: api-performance-test
+spec:
+  parallelism: 1
+  script:
+    configMap:
+      name: k6-smoke-test
+      file: test.js
+  runner:
+    resources:
+      limits:
+        cpu: "200m"
+        memory: "256Mi"

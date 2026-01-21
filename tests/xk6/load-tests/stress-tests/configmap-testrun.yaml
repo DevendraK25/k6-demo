@@ -1,0 +1,14 @@
+apiVersion: k6.io/v1alpha1
+kind: TestRun
+metadata:
+  name: k8s-infra-stress
+spec:
+  parallelism: 1
+  script:
+    configMap:
+      name: xk6-stress-test
+      file: configmap-test.js
+  runner:
+    image: xk6-k8s:latest
+    imagePullPolicy: Never
+    serviceAccountName: xk6-test-sa

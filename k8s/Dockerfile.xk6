@@ -1,0 +1,19 @@
+# Stage 1: Build the custom binary
+# Updated to 1.25 to meet the tool's requirements
+FROM golang:1.25-alpine AS builder
+
+# git is required for xk6 to download the extension
+RUN apk add --no-cache git
+
+# Install the custom build tool
+RUN go install go.k6.io/xk6/cmd/xk6@latest
+
+# Build k6 with the kubernetes extension
+RUN xk6 build --with github.com/grafana/xk6-kubernetes
+
+# Stage 2: Create the slim runner image
+FROM alpine:latest
+RUN apk add --no-cache ca-certificates
+COPY --from=builder /go/k6 /usr/bin/k6
+
+ENTRYPOINT ["k6"]

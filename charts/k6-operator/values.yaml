@@ -1,0 +1,70 @@
+nameOverride: ""
+fullnameOverride: ""
+global:
+  image:
+    registry: ""
+    pullSecrets: []
+customAnnotations: {}
+podAnnotations: {}
+customLabels: {}
+podLabels: {}
+nodeSelector: {}
+affinity: {}
+tolerations: []
+installCRDs: true
+rbac:
+  namespaced: false
+namespace:
+  create: true
+metrics:
+  serviceMonitor:
+    enabled: false
+    namespace: ""
+    jobLabel: ""
+    interval: ""
+    scrapeTimeout: ""
+    relabelings: []
+    metricRelabelings: []
+    selector: {}
+    labels: {}
+    honorLabels: false
+service:
+  enabled: true
+  labels: {}
+  annotations: {}
+  portName: "https"
+manager:
+  logging:
+    development: true
+  replicas: 1
+  serviceAccount:
+    name: k6-operator-controller
+    create: true
+  image:
+    registry: ghcr.io
+    repository: grafana/k6-operator
+    tag: controller-v1.1.0
+    pullPolicy: IfNotPresent
+  livenessProbe:
+    httpGet:
+      path: /healthz
+      port: 8081
+    initialDelaySeconds: 15
+    periodSeconds: 20
+  readinessProbe:
+    httpGet:
+      path: /healthz
+      port: 8081
+    initialDelaySeconds: 5
+    periodSeconds: 10
+  env: []
+  envFrom: []
+  resources:
+    limits:
+      cpu: 100m
+      memory: 100Mi
+    requests:
+      cpu: 100m
+      memory: 50Mi
+  containerSecurityContext: {}
+  podSecurityContext: {}
